@@ -92,5 +92,5 @@ def create_tables():
 # Call the function to create tables and initialize data
 create_tables()
 
-if _name_ == '_main_':
+if __name__ == '_main_':
     app.run(debug=True, host='0.0.0.0')

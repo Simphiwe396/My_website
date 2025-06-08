@@ -3,7 +3,7 @@ import os
 import sys
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(_file_)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # Initialize Flask app
 app = Flask(_name_)

@@ -2,8 +2,8 @@ from datetime import datetime
 from src.models.db import db
 
 class Category(db.Model):
-    _tablename_ = 'categories'
-    
+    __tablename__ = 'categories'  # ✅ Use double underscores: __tablename__
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
     description = db.Column(db.String(255), nullable=True)
@@ -11,10 +11,10 @@ class Category(db.Model):
     is_featured = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
-    def _repr_(self):
+
+    def __repr__(self):  # ✅ Use double underscores: __repr__
         return f'<Category {self.name}>'
-    
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -25,8 +25,8 @@ class Category(db.Model):
         }
 
 class Product(db.Model):
-    _tablename_ = 'products'
-    
+    __tablename__ = 'products'  # ✅ Use double underscores
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
@@ -40,24 +40,16 @@ class Product(db.Model):
     is_sale = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     # Relationships
     category = db.relationship('Category', backref=db.backref('products', lazy=True))
-    
-    def _repr_(self):
+
+    def __repr__(self):  # ✅ Use double underscores
         return f'<Product {self.name}>'
-    
+
     def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
             'description': self.description,
             'price': self.price,
-            'sale_price': self.sale_price,
-            'image_url': self.image_url,
-            'category': self.category.name,
-            'stock': self.stock,
-            'is_featured': self.is_featured,
-            'is_new': self.is_new,
-            'is_sale': self.is_sale
-        }

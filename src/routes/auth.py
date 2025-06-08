@@ -4,6 +4,7 @@ from src.models.user import User, db
 import jwt
 import datetime
 import os
+from functools import wraps
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -61,7 +62,7 @@ def login():
         'username': user.username,
         'is_admin': user.is_admin,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)
-    }, SECRET_KEY)
+    }, SECRET_KEY, algorithm='HS256')
     
     return jsonify({
         'message': 'Login successful',
@@ -92,4 +93,32 @@ def get_profile():
     except jwt.InvalidTokenError:
         return jsonify({'message': 'Invalid token'}), 401
 
-# ... (rest of auth routes)
+# =============================
+# Token Required Decorator
+# =============================
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'message': 'Token is missing'}), 401
+
+        try:
+            token = token.split(" ")[1]  # Remove 'Bearer ' prefix
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            current_user = User.query.get(data['user_id'])
+
+            if not current_user:
+                return jsonify({'message': 'User not found'}), 404
+
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token has expired'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'message': 'Invalid token'}), 401
+        except Exception as e:
+            return jsonify({'message': str(e)}), 401
+
+        return f(current_user, *args, **kwargs)
+    
+    return decorated

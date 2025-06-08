@@ -3,7 +3,7 @@ from src.models.order import Order, OrderItem, db
 from src.models.product import Product
 from src.routes.auth import token_required
 
-orders_bp = Blueprint('orders', _name_)
+orders_bp = Blueprint('orders', __name__)
 
 # Create new order (checkout)
 @orders_bp.route('/', methods=['POST'])

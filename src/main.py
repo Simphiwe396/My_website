@@ -4,26 +4,20 @@ load_dotenv()
 from flask import Flask, send_from_directory, jsonify
 import os
 import sys
-import os
-
-# Get the database URL from environment variables
-DATABASE_URL = os.environ.get('DATABASE_URL')
-
-if not DATABASE_URL:
-    raise Exception("DATABASE_URL environment variable is not set!")
-
-# Set SQLAlchemy config
-app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # Initialize Flask app
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
-# Configure database - Updated for PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.getenv('DB_USERNAME', 'postgres')}:{os.getenv('DB_PASSWORD', 'password')}@{os.getenv('DB_HOST', 'localhost')}:{os.getenv('DB_PORT', '5432')}/{os.getenv('DB_NAME', 'stylehub')}"
+# Get the database URL from environment variables
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if not DATABASE_URL:
+    raise Exception("DATABASE_URL environment variable is not set!")
+
+# Set SQLAlchemy config
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key')
 
@@ -63,10 +57,8 @@ def serve(path):
 def create_tables():
     with app.app_context():
         db.create_all()
-        
-        # Check if we need to add initial data
+
         if Category.query.count() == 0:
-            # Add categories
             categories = [
                 Category(name='T-Shirts', description='Comfortable and stylish t-shirts', image_url='https://images.unsplash.com/photo-1489987707025-afc232f7ea0f', is_featured=True),
                 Category(name='Jeans', description='Durable and fashionable jeans', image_url='https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec', is_featured=True),
@@ -74,31 +66,19 @@ def create_tables():
                 Category(name='Sweaters', description='Warm and cozy sweaters', image_url='https://images.unsplash.com/photo-1617331721458-bd3bd3f9c7f8', is_featured=True),
                 Category(name='Accessories', description='Complete your look with our accessories', image_url='https://images.unsplash.com/photo-1611923134239-b16b1d0885f4', is_featured=False)
             ]
-            
-            for category in categories:
-                db.session.add(category)
-            
+            db.session.add_all(categories)
             db.session.commit()
-            
-            # Add sample products
+
             products = [
                 Product(name='Classic White T-Shirt', description='A comfortable white t-shirt made from 100% cotton', price=24.99, sale_price=19.99, image_url='https://images.unsplash.com/photo-1583743814966-8936f5b7be1a', category_id=1, stock=50, is_featured=True, is_new=True, is_sale=True),
                 Product(name='Slim Fit Jeans', description='Modern slim fit jeans with a comfortable stretch', price=49.99, image_url='https://images.unsplash.com/photo-1541099649105-f69ad21f3246', category_id=2, stock=30, is_featured=True, is_new=False, is_sale=False),
                 Product(name='Summer Floral Dress', description='Light and airy floral dress perfect for summer days', price=59.99, sale_price=39.99, image_url='https://images.unsplash.com/photo-1515372039744-b8f02a3ae446', category_id=3, stock=25, is_featured=True, is_new=False, is_sale=True),
                 Product(name='Cozy Knit Sweater', description='Soft knit sweater to keep you warm during cold days', price=45.99, image_url='images/products/cozy_sweater.jpg', category_id=4, stock=40, is_featured=True, is_new=True, is_sale=False)
             ]
-            
-            for product in products:
-                db.session.add(product)
-            
+            db.session.add_all(products)
             db.session.commit()
-            
-            # Add admin user
-            admin = User(
-                username='admin',
-                email='admin@example.com',
-                is_admin=True
-            )
+
+            admin = User(username='admin', email='admin@example.com', is_admin=True)
             admin.set_password('admin123')
             db.session.add(admin)
             db.session.commit()
@@ -106,5 +86,6 @@ def create_tables():
 # Call the function to create tables and initialize data
 create_tables()
 
-if __name__ == '_main_':
+# Final app run condition
+if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

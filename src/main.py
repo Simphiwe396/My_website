@@ -1,6 +1,17 @@
 from flask import Flask, send_from_directory, jsonify
 import os
 import sys
+import os
+
+# Get the database URL from environment variables
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if not DATABASE_URL:
+    raise Exception("DATABASE_URL environment variable is not set!")
+
+# Set SQLAlchemy config
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))

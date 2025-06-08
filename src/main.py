@@ -11,7 +11,11 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 # Initialize Flask app
 app = Flask(__name__, static_folder='static')
 
-# Set SQLAlchemy config
+# Set SQLAlchemy config before initializing db
+app.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"postgresql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}"
+    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key')
 
@@ -47,7 +51,7 @@ def serve(path):
     else:
         return send_from_directory(app.static_folder, 'index.html')
 
-# Initialize database tables
+# Initialize database tables and seed data
 def create_tables():
     with app.app_context():
         db.create_all()

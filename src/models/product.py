@@ -2,7 +2,7 @@ from datetime import datetime
 from src.models.db import db
 
 class Category(db.Model):
-    __tablename__ = 'categories'  # ✅ Use double underscores: __tablename__
+    __tablename__ = 'categories'  # Corrected double underscore
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False, unique=True)
@@ -12,7 +12,7 @@ class Category(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __repr__(self):  # ✅ Use double underscores: __repr__
+    def __repr__(self):  # Corrected from _repr_
         return f'<Category {self.name}>'
 
     def to_dict(self):
@@ -21,11 +21,13 @@ class Category(db.Model):
             'name': self.name,
             'description': self.description,
             'image_url': self.image_url,
-            'is_featured': self.is_featured
+            'is_featured': self.is_featured,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
         }
 
 class Product(db.Model):
-    __tablename__ = 'products'  # ✅ Use double underscores
+    __tablename__ = 'products'  # Corrected double underscore
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -41,10 +43,10 @@ class Product(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # Relationships
+    # Relationship
     category = db.relationship('Category', backref=db.backref('products', lazy=True))
 
-    def __repr__(self):  # ✅ Use double underscores
+    def __repr__(self):  # Corrected from _repr_
         return f'<Product {self.name}>'
 
     def to_dict(self):
@@ -53,3 +55,13 @@ class Product(db.Model):
             'name': self.name,
             'description': self.description,
             'price': self.price,
+            'sale_price': self.sale_price,
+            'image_url': self.image_url,
+            'category': self.category.name if self.category else None,
+            'stock': self.stock,
+            'is_featured': self.is_featured,
+            'is_new': self.is_new,
+            'is_sale': self.is_sale,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }

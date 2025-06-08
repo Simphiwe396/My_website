@@ -5,7 +5,7 @@ import jwt
 import datetime
 import os
 
-auth_bp = Blueprint('auth', _name_)
+auth_bp = Blueprint('auth', __name__)
 
 # Secret key for JWT
 SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_secret_key')

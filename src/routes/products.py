@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from src.models.product import Product, Category, db
 
-products_bp = Blueprint('products', _name_)
+products_bp = Blueprint('products', __name__)
 
 # Get all products
 @products_bp.route('/', methods=['GET'])

@@ -11,11 +11,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 # Initialize Flask app
 app = Flask(__name__, static_folder='static')
 
-# Set SQLAlchemy config before initializing db
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    f"postgresql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}"
-    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-)
+# ✅ Use SQLite (no PostgreSQL needed)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key')
 
@@ -37,12 +34,10 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(products_bp, url_prefix='/api/products')
 app.register_blueprint(orders_bp, url_prefix='/api/orders')
 
-# Health check endpoint for Render
 @app.route('/healthz')
 def health_check():
     return jsonify({"status": "healthy"}), 200
 
-# Serve static files
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
@@ -51,29 +46,21 @@ def serve(path):
     else:
         return send_from_directory(app.static_folder, 'index.html')
 
-# Initialize database tables and seed data
+# Create tables and sample data
 def create_tables():
     with app.app_context():
         db.create_all()
-
         if Category.query.count() == 0:
             categories = [
-                Category(name='T-Shirts', description='Comfortable and stylish t-shirts', image_url='https://images.unsplash.com/photo-1489987707025-afc232f7ea0f', is_featured=True),
-                Category(name='Jeans', description='Durable and fashionable jeans', image_url='https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec', is_featured=True),
-                Category(name='Dresses', description='Elegant dresses for all occasions', image_url='https://images.unsplash.com/photo-1591369822096-ffd140ec948f', is_featured=True),
-                Category(name='Sweaters', description='Warm and cozy sweaters', image_url='https://images.unsplash.com/photo-1617331721458-bd3bd3f9c7f8', is_featured=True),
-                Category(name='Accessories', description='Complete your look with our accessories', image_url='https://images.unsplash.com/photo-1611923134239-b16b1d0885f4', is_featured=False)
+                Category(name='T-Shirts', description='Comfortable and stylish', image_url='', is_featured=True),
+                Category(name='Jeans', description='Durable and fashionable', image_url='', is_featured=True),
             ]
             db.session.add_all(categories)
             db.session.commit()
 
-            products = [
-                Product(name='Classic White T-Shirt', description='A comfortable white t-shirt made from 100% cotton', price=24.99, sale_price=19.99, image_url='https://images.unsplash.com/photo-1583743814966-8936f5b7be1a', category_id=1, stock=50, is_featured=True, is_new=True, is_sale=True),
-                Product(name='Slim Fit Jeans', description='Modern slim fit jeans with a comfortable stretch', price=49.99, image_url='https://images.unsplash.com/photo-1541099649105-f69ad21f3246', category_id=2, stock=30, is_featured=True, is_new=False, is_sale=False),
-                Product(name='Summer Floral Dress', description='Light and airy floral dress perfect for summer days', price=59.99, sale_price=39.99, image_url='https://images.unsplash.com/photo-1515372039744-b8f02a3ae446', category_id=3, stock=25, is_featured=True, is_new=False, is_sale=True),
-                Product(name='Cozy Knit Sweater', description='Soft knit sweater to keep you warm during cold days', price=45.99, image_url='images/products/cozy_sweater.jpg', category_id=4, stock=40, is_featured=True, is_new=True, is_sale=False)
-            ]
-            db.session.add_all(products)
+            product = Product(name='Sample T-Shirt', description='Nice shirt', price=19.99, sale_price=14.99,
+                              image_url='', category_id=1, stock=10, is_featured=True, is_new=True, is_sale=True)
+            db.session.add(product)
             db.session.commit()
 
             admin = User(username='admin', email='admin@example.com', is_admin=True)
@@ -81,9 +68,7 @@ def create_tables():
             db.session.add(admin)
             db.session.commit()
 
-# Call the function to create tables and initialize data
 create_tables()
 
-# Final app run condition
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

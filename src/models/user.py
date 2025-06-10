@@ -1,9 +1,9 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
-from src.models.db import db
+from models.db import db
 
 class User(db.Model):
-    __tablename__ = 'users'  # ✅ FIXED: Use double underscores
+    __tablename__ = 'users'  # ✅ Correct double underscores
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
@@ -21,7 +21,7 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    def __repr__(self):  # ✅ FIXED: Corrected method name
+    def __repr__(self):
         return f'<User {self.username}>'
 
     def set_password(self, password):

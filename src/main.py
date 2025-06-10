@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 # Initialize Flask app
 app = Flask(__name__, static_folder='static')
 
-# ✅ Use SQLite (no PostgreSQL needed)
+# ✅ SQLite (or use env DATABASE_URL for PostgreSQL)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key')
@@ -20,7 +20,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key')
 from src.models.db import db
 db.init_app(app)
 
-# Import models to create tables
+# ✅ Import all models BEFORE db.create_all
 from src.models.product import Product, Category
 from src.models.user import User
 from src.models.order import Order, OrderItem
@@ -47,7 +47,7 @@ def serve(path):
     elif os.path.exists(os.path.join(app.static_folder, 'index.html')):
         return send_from_directory(app.static_folder, 'index.html')
     else:
-        return "Static index.html not found", 404
+        return jsonify({'error': 'Not Found'}), 404  # ✅ prevent "None" return
 
 # Create tables and sample data
 def create_tables():
@@ -71,9 +71,6 @@ def create_tables():
             db.session.add(admin)
             db.session.commit()
 
-# ✅ Ensure tables are created at startup
-create_tables()
-
-# ✅ This is needed for Render to start the server correctly
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    create_tables()  # ✅ Only call on dev
+    app.run(debug=True, host='0.0.0.0')

@@ -1,74 +1,19 @@
-from dotenv import load_dotenv
-load_dotenv()
-
-from flask import Flask, send_from_directory, jsonify
-import os
-import sys
-
-# Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-
-# Initialize Flask app
-app = Flask(__name__, static_folder='static')
-
-# ✅ Use SQLite (no PostgreSQL needed)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key')
-
-# Import and initialize shared db instance
 from src.models.db import db
-db.init_app(app)
+from werkzeug.security import generate_password_hash, check_password_hash
 
-# Import models to create tables
-from src.models.product import Product, Category
-from src.models.user import User
-from src.models.order import Order, OrderItem
+class User(db.Model):
+    __tablename__ = 'users'
 
-# Register blueprints
-from src.routes.auth import auth_bp
-from src.routes.products import products_bp
-from src.routes.orders import orders_bp
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
 
-app.register_blueprint(auth_bp, url_prefix='/api/auth')
-app.register_blueprint(products_bp, url_prefix='/api/products')
-app.register_blueprint(orders_bp, url_prefix='/api/orders')
+    orders = db.relationship('Order', backref='user', lazy=True)
 
-@app.route('/healthz')
-def health_check():
-    return jsonify({"status": "healthy"}), 200
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    if path and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    else:
-        return send_from_directory(app.static_folder, 'index.html')
-
-# Create tables and sample data
-def create_tables():
-    with app.app_context():
-        db.create_all()
-        if Category.query.count() == 0:
-            categories = [
-                Category(name='T-Shirts', description='Comfortable and stylish', image_url='', is_featured=True),
-                Category(name='Jeans', description='Durable and fashionable', image_url='', is_featured=True),
-            ]
-            db.session.add_all(categories)
-            db.session.commit()
-
-            product = Product(name='Sample T-Shirt', description='Nice shirt', price=19.99, sale_price=14.99,
-                              image_url='', category_id=1, stock=10, is_featured=True, is_new=True, is_sale=True)
-            db.session.add(product)
-            db.session.commit()
-
-            admin = User(username='admin', email='admin@example.com', is_admin=True)
-            admin.set_password('admin123')
-            db.session.add(admin)
-            db.session.commit()
-
-create_tables()
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)

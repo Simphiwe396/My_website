@@ -1,15 +1,15 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from flask import Flask, send_from_directory, jsonify
+from flask import Flask, render_template, send_from_directory, jsonify
 import os
 import sys
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(_file_)))
 
 # Initialize Flask app
-app = Flask(__name__, static_folder='static')
+app = Flask(_name_, static_folder='static', template_folder='templates')
 
 # ✅ SQLite (or use env DATABASE_URL for PostgreSQL)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local.db')
@@ -34,22 +34,41 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(products_bp, url_prefix='/api/products')
 app.register_blueprint(orders_bp, url_prefix='/api/orders')
 
+# ✅ Health check
 @app.route('/healthz')
 def health_check():
     return jsonify({"status": "healthy"}), 200
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    file_path = os.path.join(app.static_folder, path)
-    if path and os.path.exists(file_path):
-        return send_from_directory(app.static_folder, path)
-    elif os.path.exists(os.path.join(app.static_folder, 'index.html')):
-        return send_from_directory(app.static_folder, 'index.html')
-    else:
-        return jsonify({'error': 'Not Found'}), 404  # ✅ prevent "None" return
+# ✅ Page routes to render HTML
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-# Create tables and sample data
+@app.route('/shop')
+def shop():
+    return render_template('shop.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/categories')
+def categories():
+    return render_template('categories.html')
+
+# ✅ Fallback for unmatched static files (optional, safe fallback)
+@app.route('/<path:filename>')
+def static_proxy(filename):
+    file_path = os.path.join(app.static_folder, filename)
+    if os.path.exists(file_path):
+        return send_from_directory(app.static_folder, filename)
+    return jsonify({'error': 'File not found'}), 404
+
+# ✅ Create tables and sample data (only for local dev)
 def create_tables():
     with app.app_context():
         db.create_all()
@@ -71,6 +90,6 @@ def create_tables():
             db.session.add(admin)
             db.session.commit()
 
-if __name__ == '__main__':
-    create_tables()  # ✅ Only call on dev
+if _name_ == '_main_':
+    create_tables()
     app.run(debug=True, host='0.0.0.0')

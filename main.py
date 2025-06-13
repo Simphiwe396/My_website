@@ -6,10 +6,10 @@ import os
 import sys
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(_file_)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 # Initialize Flask app
-app = Flask(_name_, static_folder='static', template_folder='templates')
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 # ✅ SQLite (or use env DATABASE_URL for PostgreSQL)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///local.db')
@@ -90,6 +90,6 @@ def create_tables():
             db.session.add(admin)
             db.session.commit()
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     create_tables()
     app.run(debug=True, host='0.0.0.0')

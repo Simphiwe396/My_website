@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - StyleHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    {% include 'navbar.html' %}
+
+    <!-- Shop Banner -->
+    <section class="shop-banner">
+        <div class="container">
+            <h1 class="banner-title">Shop Our Collection</h1>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section class="products">
+        <div class="container">
+            <div class="product-grid">
+
+                <!-- Product 6 -->
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="https://images.unsplash.com/photo-1475178626620-a4d074967452?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Distressed Jeans" class="product-img">
+                        <span class="product-badge">Sale</span>
+                        <div class="product-actions">
+                            <div class="product-action"><i class="fas fa-heart"></i></div>
+                            <div class="product-action"><i class="fas fa-eye"></i></div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <span class="product-category">Jeans</span>
+                        <h3 class="product-title">Distressed Jeans</h3>
+                        <div class="product-rating">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="rating-count">(28)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$44.99</span>
+                            <span class="old-price">$59.99</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 7 -->
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="https://images.unsplash.com/photo-1612336307429-8a898d10e223?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Elegant Evening Dress" class="product-img">
+                        <div class="product-actions">
+                            <div class="product-action"><i class="fas fa-heart"></i></div>
+                            <div class="product-action"><i class="fas fa-eye"></i></div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <span class="product-category">Dresses</span>
+                        <h3 class="product-title">Elegant Evening Dress</h3>
+                        <div class="product-rating">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="rating-count">(32)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$79.99</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+
+                <!-- Product 8 -->
+                <div class="product-card">
+                    <div class="product-img-container">
+                        <img src="https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60" alt="Turtleneck Sweater" class="product-img">
+                        <span class="product-badge">New</span>
+                        <div class="product-actions">
+                            <div class="product-action"><i class="fas fa-heart"></i></div>
+                            <div class="product-action"><i class="fas fa-eye"></i></div>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <span class="product-category">Sweaters</span>
+                        <h3 class="product-title">Turtleneck Sweater</h3>
+                        <div class="product-rating">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span class="rating-count">(19)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">$54.99</span>
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Pagination -->
+    <section class="pagination">
+        <div class="container">
+            <div class="pagination-container">
+                <a href="#" class="pagination-item active">1</a>
+                <a href="#" class="pagination-item">2</a>
+                <a href="#" class="pagination-item">3</a>
+                <a href="#" class="pagination-item">4</a>
+                <a href="#" class="pagination-item"><i class="fas fa-angle-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2 class="newsletter-title">Subscribe to Our Newsletter</h2>
+            <p class="newsletter-text">Get the latest updates on new products and upcoming sales</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Your email address">
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    {% include 'footer.html' %}
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+</body>
+</html>

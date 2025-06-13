@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StyleHub - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head><body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <a href="{{ url_for('home') }}">StyleHub</a>
+            </div>
+            <nav class="nav" id="navList">
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('shop') }}">Shop</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                    <li><a href="{{ url_for('categories') }}">Categories</a></li>
+                </ul>
+            </nav>
+            <div class="menu-toggle" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header><!-- Hero Section -->
+<section class="hero">
+    <div class="container hero-container">
+        <div class="hero-text">
+            <h1>Discover Your Style</h1>
+            <p>Shop the latest trends in fashion and accessories.</p>
+            <a href="{{ url_for('shop') }}" class="btn">Shop Now</a>
+        </div>
+        <div class="hero-img">
+            <img src="https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=800&q=60" alt="Fashion Model">
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Preview -->
+<section class="featured">
+    <div class="container">
+        <h2 class="section-title">Featured Products</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-img-container">
+                    <img src="https://images.unsplash.com/photo-1520975661595-6453be3f7070?auto=format&fit=crop&w=500&q=60" alt="Red T-Shirt" class="product-img">
+                    <span class="product-badge">New</span>
+                </div>
+                <div class="product-content">
+                    <span class="product-category">T-Shirts</span>
+                    <h3 class="product-title">Red T-Shirt</h3>
+                    <div class="product-price">
+                        <span class="current-price">$19.99</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img-container">
+                    <img src="https://images.unsplash.com/photo-1514997130083-49f19c9b6f87?auto=format&fit=crop&w=500&q=60" alt="Blue Jeans" class="product-img">
+                </div>
+                <div class="product-content">
+                    <span class="product-category">Jeans</span>
+                    <h3 class="product-title">Classic Blue Jeans</h3>
+                    <div class="product-price">
+                        <span class="current-price">$39.99</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-img-container">
+                    <img src="https://images.unsplash.com/photo-1592878849127-453883b9a7be?auto=format&fit=crop&w=500&q=60" alt="Evening Dress" class="product-img">
+                </div>
+                <div class="product-content">
+                    <span class="product-category">Dresses</span>
+                    <h3 class="product-title">Evening Gown</h3>
+                    <div class="product-price">
+                        <span class="current-price">$89.99</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+    <div class="container">
+        <h2 class="newsletter-title">Subscribe to Our Newsletter</h2>
+        <p class="newsletter-text">Get the latest updates on new products and upcoming sales</p>
+        <form class="newsletter-form">
+            <input type="email" class="newsletter-input" placeholder="Your email address">
+            <button type="submit" class="newsletter-btn">Subscribe</button>
+        </form>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="container footer-container">
+        <div class="footer-col">
+            <h3 class="footer-title">2ngTDE</h3>
+            <p>Your one-stop destination for trendy and comfortable clothing for all seasons.</p>
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-pinterest"></i></a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h3 class="footer-title">Quick Links</h3>
+            <ul class="footer-links">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('shop') }}">Shop</a></li>
+                <li><a href="{{ url_for('about') }}">About Us</a></li>
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('categories') }}">Categories</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3 class="footer-title">Categories</h3>
+            <ul class="footer-links">
+                <li><a href="{{ url_for('shop') }}?category=tshirts">T-Shirts</a></li>
+                <li><a href="{{ url_for('shop') }}?category=jeans">Jeans</a></li>
+                <li><a href="{{ url_for('shop') }}?category=dresses">Dresses</a></li>
+                <li><a href="{{ url_for('shop') }}?category=sweaters">Sweaters</a></li>
+                <li><a href="{{ url_for('shop') }}?category=accessories">Accessories</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3 class="footer-title">Contact Us</h3>
+            <ul class="footer-contact">
+                <li><i class="fas fa-map-marker-alt contact-icon"></i>123 Fashion Street, City, Country</li>
+                <li><i class="fas fa-phone-alt contact-icon"></i>+1 234 567 890</li>
+                <li><i class="fas fa-envelope contact-icon"></i>info@2ngtde.com</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div class="container">
+            <p>&copy; 2025 2ngTDE. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript -->
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+
+</body></html>

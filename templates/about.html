@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | StyleHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    {% include 'partials/navbar.html' %}
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <h1 class="about-title">About StyleHub</h1>
+            <p class="about-description">
+                Welcome to StyleHub – your ultimate destination for trendsetting fashion. We believe that style is a powerful form of expression, and our mission is to provide high-quality, stylish, and affordable apparel that helps you look and feel your best.
+            </p>
+            <div class="about-images">
+                <img src="{{ url_for('static', filename='images/about1.jpg') }}" alt="Team" class="about-img">
+                <img src="{{ url_for('static', filename='images/about2.jpg') }}" alt="Store" class="about-img">
+            </div>
+            <p class="about-description">
+                From comfy everyday wear to standout pieces for special occasions, our collections are curated with you in mind. We're committed to sustainability, inclusivity, and staying ahead of the curve in fashion innovation.
+            </p>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2 class="newsletter-title">Subscribe to Our Newsletter</h2>
+            <p class="newsletter-text">Stay updated on new arrivals and special offers</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Your email address">
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    {% include 'partials/footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+</body>
+</html>

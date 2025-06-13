@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories | StyleHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    {% include 'partials/navbar.html' %}
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <div class="container">
+            <h1 class="section-title">Shop by Category</h1>
+            <div class="category-grid">
+                <div class="category-card">
+                    <a href="{{ url_for('shop') }}?category=tshirts">
+                        <img src="{{ url_for('static', filename='images/categories/tshirts.jpg') }}" alt="T-Shirts">
+                        <h3>T-Shirts</h3>
+                    </a>
+                </div>
+                <div class="category-card">
+                    <a href="{{ url_for('shop') }}?category=jeans">
+                        <img src="{{ url_for('static', filename='images/categories/jeans.jpg') }}" alt="Jeans">
+                        <h3>Jeans</h3>
+                    </a>
+                </div>
+                <div class="category-card">
+                    <a href="{{ url_for('shop') }}?category=dresses">
+                        <img src="{{ url_for('static', filename='images/categories/dresses.jpg') }}" alt="Dresses">
+                        <h3>Dresses</h3>
+                    </a>
+                </div>
+                <div class="category-card">
+                    <a href="{{ url_for('shop') }}?category=sweaters">
+                        <img src="{{ url_for('static', filename='images/categories/sweaters.jpg') }}" alt="Sweaters">
+                        <h3>Sweaters</h3>
+                    </a>
+                </div>
+                <div class="category-card">
+                    <a href="{{ url_for('shop') }}?category=accessories">
+                        <img src="{{ url_for('static', filename='images/categories/accessories.jpg') }}" alt="Accessories">
+                        <h3>Accessories</h3>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter">
+        <div class="container">
+            <h2 class="newsletter-title">Subscribe to Our Newsletter</h2>
+            <p class="newsletter-text">Don’t miss out on exclusive updates and discounts!</p>
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Your email address">
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    {% include 'partials/footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+</body>
+</html>
